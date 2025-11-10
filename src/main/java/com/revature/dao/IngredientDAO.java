@@ -1,5 +1,7 @@
 package com.revature.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ public class IngredientDAO {
      * @param connectionUtil the utility used to connect to the database
      */
     public IngredientDAO(ConnectionUtil connectionUtil) {
-        
+        this.connectionUtil=connectionUtil;
     }
 
     /**
@@ -43,6 +45,19 @@ public class IngredientDAO {
      * @return the Ingredient object with the specified id.
      */
     public Ingredient getIngredientById(int id) {
+         String sql = "SELECT * FROM INGREDIENT WHERE ID = ?";
+        try (var conn = connectionUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapSingleRow(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -53,6 +68,21 @@ public class IngredientDAO {
      * @return the unique identifier of the created Ingredient.
      */
     public int createIngredient(Ingredient ingredient) {
+        String sql = "INSERT INTO INGREDIENT (NAME) VALUES (?)";
+        try (var conn = connectionUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, ingredient.getName());
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // Return the generated ID
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
@@ -62,6 +92,16 @@ public class IngredientDAO {
      * @param ingredient the Ingredient object to be deleted.
      */
     public void deleteIngredient(Ingredient ingredient) {
+         String sql = "DELETE FROM INGREDIENT WHERE ID = ?";
+        try (var conn = connectionUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, ingredient.getId());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         
     }
 
@@ -71,7 +111,17 @@ public class IngredientDAO {
      * @param ingredient the Ingredient object containing updated information.
      */
     public void updateIngredient(Ingredient ingredient) {
-        
+         String sql = "UPDATE INGREDIENT SET NAME = ? WHERE ID = ?";
+        try (var conn = connectionUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, ingredient.getName());
+            ps.setInt(2, ingredient.getId());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -80,7 +130,18 @@ public class IngredientDAO {
      * @return a list of all Ingredient objects.
      */
     public List<Ingredient> getAllIngredients() {
-        return null;
+        List<Ingredient> ingredients = new ArrayList<>();
+        String sql = "SELECT * FROM INGREDIENT ORDER BY ID";
+        try (var conn = connectionUtil.getConnection();
+             var stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            ingredients = mapRows(rs);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ingredients;
     }
 
     /**
@@ -90,7 +151,12 @@ public class IngredientDAO {
      * @return a Page of Ingredient objects containing the retrieved ingredients.
      */
     public Page<Ingredient> getAllIngredients(PageOptions pageOptions) {
-        return null;
+         List<Ingredient> ingredients = getAllIngredients();
+        int offset = (pageOptions.getPageNumber() - 1) * pageOptions.getPageSize();
+        int limit = Math.min(offset + pageOptions.getPageSize(), ingredients.size());
+        List<Ingredient> subList = ingredients.subList(offset, limit);
+        int totalPages = (int) Math.ceil((double) ingredients.size() / pageOptions.getPageSize());
+        return new Page<>(pageOptions.getPageNumber(), pageOptions.getPageSize(), totalPages, ingredients.size(), subList);
     }
 
     /**
@@ -100,7 +166,20 @@ public class IngredientDAO {
      * @return a list of Ingredient objects that match the search term.
      */
     public List<Ingredient> searchIngredients(String term) {
-        return null;
+         List<Ingredient> ingredients = new ArrayList<>();
+        String sql = "SELECT * FROM INGREDIENT WHERE NAME LIKE ? ORDER BY ID";
+        try (var conn = connectionUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + term + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                ingredients = mapRows(rs);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ingredients;
     }
 
     /**
@@ -111,7 +190,12 @@ public class IngredientDAO {
      * @return a Page of Ingredient objects containing the retrieved ingredients.
      */
     public Page<Ingredient> searchIngredients(String term, PageOptions pageOptions) {
-        return null;
+         List<Ingredient> ingredients = searchIngredients(term);
+        int offset = (pageOptions.getPageNumber() - 1) * pageOptions.getPageSize();
+        int limit = Math.min(offset + pageOptions.getPageSize(), ingredients.size());
+        List<Ingredient> subList = ingredients.subList(offset, limit);
+        int totalPages = (int) Math.ceil((double) ingredients.size() / pageOptions.getPageSize());
+        return new Page<>(pageOptions.getPageNumber(), pageOptions.getPageSize(), totalPages, ingredients.size(), subList);
     }
 
     // below are helper methods for your convenience

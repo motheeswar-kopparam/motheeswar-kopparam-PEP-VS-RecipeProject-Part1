@@ -3,7 +3,11 @@ package com.revature.controller;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import com.revature.model.Ingredient;
 import com.revature.service.IngredientService;
+import java.util.List;
+import java.util.Optional;
+import com.revature.util.Page;
 
 
 /**
@@ -30,6 +34,7 @@ public class IngredientController {
      */
 
     public IngredientController(IngredientService ingredientService) {
+        this.ingredientService=ingredientService;
         
     }
 
@@ -41,7 +46,12 @@ public class IngredientController {
      * @param ctx the Javalin context containing the request path parameter for the ingredient ID
      */
     public void getIngredient(Context ctx) {
-        
+        int id = Integer.parseInt(ctx.pathParam("id"));
+        ingredientService.findIngredient(id).ifPresentOrElse((ingredient) -> {
+            ctx.json(ingredient).status(200);
+        },() -> {
+            ctx.status(404); 
+        });        
     }
 
     /**
@@ -52,7 +62,9 @@ public class IngredientController {
      * @param ctx the Javalin context containing the request path parameter for the ingredient id
      */
     public void deleteIngredient(Context ctx) {
-        
+        int id = Integer.parseInt(ctx.pathParam("id"));
+        ingredientService.deleteIngredient(id);
+        ctx.status(204);
     }
 
     /**
@@ -63,8 +75,17 @@ public class IngredientController {
      * @param ctx the Javalin context containing the request path parameter and updated ingredient data in the request body
      */
     public void updateIngredient(Context ctx) {
-       
-    }
+        int id = Integer.parseInt(ctx.pathParam("id"));
+      Optional<Ingredient> existingIngredient = this.ingredientService.findIngredient(id);
+      if (existingIngredient.isEmpty()) {
+         ctx.status(404);
+      } else {
+         Ingredient updatedIngredient = (Ingredient)ctx.bodyAsClass(((Ingredient)existingIngredient.get()).getClass());
+         updatedIngredient.setId(id);
+         this.ingredientService.saveIngredient(updatedIngredient);
+         ctx.status(204);
+      }
+   }
 
     /**
      * TODO: Creates a new ingredient.
@@ -74,7 +95,9 @@ public class IngredientController {
      * @param ctx the Javalin context containing the ingredient data in the request body
      */
     public void createIngredient(Context ctx) {
-
+        var ingredient = ctx.bodyAsClass(com.revature.model.Ingredient.class);
+        ingredientService.saveIngredient(ingredient);
+        ctx.status(201).json(ingredient);
     }
 
     /**
@@ -85,8 +108,20 @@ public class IngredientController {
      * @param ctx the Javalin context containing query parameters for pagination, sorting, and filtering
      */
     public void getIngredients(Context ctx) {
-       
-    }
+        String term = ctx.queryParam("term");
+      int page = (Integer)this.getParamAsClassOrElse(ctx, "page", Integer.class, 1);
+      int pageSize = (Integer)this.getParamAsClassOrElse(ctx, "pageSize", Integer.class, 10);
+      String sortBy = (String)this.getParamAsClassOrElse(ctx, "sortBy", String.class, "id");
+      String sortDirection = (String)this.getParamAsClassOrElse(ctx, "sortDirection", String.class, "asc");
+      if (ctx.queryParam("page") == null && ctx.queryParam("pageSize") == null) {
+         List<Ingredient> ingredients = this.ingredientService.searchIngredients(term);
+         ctx.status(200).json(ingredients);
+      } else {
+         Page<Ingredient> paginatedResult = this.ingredientService.searchIngredients(term, page, pageSize, sortBy, sortDirection);
+         ctx.status(200).json(paginatedResult);
+      }
+
+   }
 
     /**
      * A helper method to retrieve a query parameter from the context as a specific class type, or return a default value if the query parameter is not present.
@@ -99,12 +134,10 @@ public class IngredientController {
      * @return the query parameter value as the specified type, or the default value if absent
      */
     private <T> T getParamAsClassOrElse(Context ctx, String queryParam, Class<T> clazz, T defaultValue) {
-        if(ctx.queryParam(queryParam) != null) {
-            return ctx.queryParamAsClass(queryParam, clazz).get();
-        } else {
-            return defaultValue;
-        }
-    }
+        return ctx.queryParam(queryParam) != null ? ctx.queryParamAsClass(queryParam, clazz).get() : defaultValue;
+   }
+
+   
     /**
      * Configure the routes for ingredient operations.
      *
@@ -118,4 +151,3 @@ public class IngredientController {
         app.delete("/ingredients/{id}", this::deleteIngredient);
     }
 }
-

@@ -1,5 +1,5 @@
 package com.revature.util;
-import java.util.stream.Collectors;
+import java.util.Arrays;
 
 import com.revature.dao.ChefDAO;
 import com.revature.model.Chef;
@@ -55,13 +55,17 @@ public class AdminMiddleware implements Handler {
     public void handle(Context ctx) {
         if (isProtectedMethod(ctx.method().name())) {
             // Get the token of the current logged in user
-            String token = AuthenticationService.loggedInUsers.keySet().stream().collect(Collectors.joining());
+            String token = ctx.header("Authentication");
+
+            if(token == null || token.isEmpty()){
+                throw new UnauthorizedResponse("Missing or invalid authorization token");
+            }
 
             // Check the corresponding chef and check if they are admin
-            boolean isAdmin = isAdmin(authService.getChefFromSessionToken(token));
+            Chef chef = authService.getChefFromSessionToken(token);
             
             // If they are not admin, throw an exception
-            if (!isAdmin) {
+            if (chef==null|| !chef.isAdmin()) {
                 throw new UnauthorizedResponse("Access denied");
             } 
         }
@@ -74,12 +78,8 @@ public class AdminMiddleware implements Handler {
      * @return true if the method is protected; false otherwise.
      */
     private boolean isProtectedMethod(String method) {
-        for (String protectedMethod : protectedMethods) {
-            if (protectedMethod.toString().equalsIgnoreCase(method)) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(protectedMethods)
+                     .anyMatch(m -> m.equalsIgnoreCase(method));
     }
 
     /**
@@ -89,10 +89,7 @@ public class AdminMiddleware implements Handler {
      * @return true if the chef is an admin; false otherwise.
      */
     private boolean isAdmin(Chef chef) {
-        if (chef != null) {
-            return chef.isAdmin();
-        }
-        return false;
+        return chef !=null && chef.isAdmin();
     }
 }
 

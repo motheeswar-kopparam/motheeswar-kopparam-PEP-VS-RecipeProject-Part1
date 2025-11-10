@@ -1,6 +1,7 @@
 package com.revature.service;
 import java.util.HashMap;
 import java.util.Map;
+
 import com.revature.model.Chef;
 
 
@@ -41,6 +42,24 @@ public class AuthenticationService {
      * @return a session token if the login is successful; null otherwise
      */
     public String login(Chef chef) {
+         if (chef == null || chef.getUsername() == null || chef.getPassword() == null) {
+        return null;
+    }
+
+    // Use the searchChefs() method from ChefService to find matching username
+    var chefs = chefService.searchChefs(chef.getUsername());
+    if (chefs == null || chefs.isEmpty()) {
+        return null;
+    }
+
+    // Assuming usernames are unique, take the first result
+    Chef existingChef = chefs.get(0);
+
+    if (existingChef.getPassword().equals(chef.getPassword())) {
+        String token = java.util.UUID.randomUUID().toString();
+        loggedInUsers.put(token, existingChef);
+        return token;
+    }
         return null; 
     }
 
@@ -51,7 +70,9 @@ public class AuthenticationService {
      */
 
     public void logout(String token) {
-        
+         if (token != null) {
+            loggedInUsers.remove(token);
+        }   
     }
 
     /**
@@ -61,7 +82,11 @@ public class AuthenticationService {
 	 * @return the registered chef object
 	 */
     public Chef registerChef(Chef chef) {
-        return null;
+        if (chef == null) {
+            return null;
+        }
+        chefService.saveChef(chef);
+        return chef;
     }
 
     /**
@@ -71,6 +96,7 @@ public class AuthenticationService {
      * @return the Chef object associated with the session token; null if not found
      */
     public Chef getChefFromSessionToken(String token) {
-        return null;
+        return loggedInUsers.get(token);
     }
+    
 }

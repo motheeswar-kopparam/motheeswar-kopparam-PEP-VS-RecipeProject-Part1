@@ -60,14 +60,7 @@ public class JavalinAppUtil {
 	
     public Javalin getApp() {
         Javalin app = Javalin.create(config -> {
-            config.plugins.enableCors(cors -> {
-                cors.add(it -> {
-                    it.anyHost();
-                });
-
-            });
-
-            
+            config.plugins.enableCors(cors -> cors.add(it -> it.anyHost()));
         });
 
         // Configure routes for each controller
@@ -78,7 +71,21 @@ public class JavalinAppUtil {
         app.before("/recipes/*", new AdminMiddleware("DELETE"));
         app.before("/ingredients/*", new AdminMiddleware("UPDATE", "CREATE", "DELETE"));
 
+        app.exception(Exception.class, (e,ctx)->{
+            ctx.status(500);
+            ctx.json(new ErrorResponse("Internal server error", e.getMessage()));
+
+        });
+
         return app;
+    }
+    static class ErrorResponse{
+        public String error;
+        public String message;
+        public ErrorResponse(String error, String message){
+            this.error=error;
+            this.message=message;
+        }
     }
 
 
