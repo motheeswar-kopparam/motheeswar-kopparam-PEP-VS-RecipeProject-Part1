@@ -12920,3 +12920,192 @@ SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
 2025-11-10 13:01:33 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
 SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-10 13:11:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-10 13:17:45 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-10 13:18:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-10 13:27:43 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-10 17:56:37 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-10 18:20:12 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-12 13:40:27 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-12 13:40:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-12 13:43:35 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-12 20:05:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-12 20:09:56 jdbc[13]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:190)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:132)
+	at org.h2.jdbcx.JdbcDataSource.getConnection(JdbcDataSource.java:155)
+	at com.revature.util.ConnectionUtil.getConnection(ConnectionUtil.java:35)
+	at com.revature.dao.ChefDAO.searchChefsByTerm(ChefDAO.java:189)
+	at com.revature.service.ChefService.searchChefs(ChefService.java:77)
+	at com.revature.service.AuthenticationService.login(AuthenticationService.java:50)
+	at com.revature.controller.AuthenticationController.login(AuthenticationController.java:73)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda$8$lambda$6$lambda$5(DefaultTasks.kt:39)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:88)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:53)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:41)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1570)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:61)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1543)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1303)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:678)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 44 more
+2025-11-12 20:09:57 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-12 20:14:20 jdbc[13]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:190)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:132)
+	at org.h2.jdbcx.JdbcDataSource.getConnection(JdbcDataSource.java:155)
+	at com.revature.util.ConnectionUtil.getConnection(ConnectionUtil.java:35)
+	at com.revature.dao.ChefDAO.searchChefsByTerm(ChefDAO.java:189)
+	at com.revature.service.ChefService.searchChefs(ChefService.java:77)
+	at com.revature.service.AuthenticationService.login(AuthenticationService.java:50)
+	at com.revature.controller.AuthenticationController.login(AuthenticationController.java:73)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda$8$lambda$6$lambda$5(DefaultTasks.kt:39)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:88)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:53)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:41)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1570)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:61)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1543)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1303)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:678)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 44 more
+2025-11-12 20:14:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]
+2025-11-12 20:19:00 jdbc[13]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:190)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:132)
+	at org.h2.jdbcx.JdbcDataSource.getConnection(JdbcDataSource.java:155)
+	at com.revature.util.ConnectionUtil.getConnection(ConnectionUtil.java:35)
+	at com.revature.dao.ChefDAO.searchChefsByTerm(ChefDAO.java:189)
+	at com.revature.service.ChefService.searchChefs(ChefService.java:77)
+	at com.revature.service.AuthenticationService.login(AuthenticationService.java:50)
+	at com.revature.controller.AuthenticationController.login(AuthenticationController.java:73)
+	at io.javalin.routing.HandlerEntry.handle(HandlerEntry.kt:19)
+	at io.javalin.http.servlet.DefaultTasks.HTTP$lambda$8$lambda$6$lambda$5(DefaultTasks.kt:39)
+	at io.javalin.http.servlet.JavalinServlet.handleTask(JavalinServlet.kt:88)
+	at io.javalin.http.servlet.JavalinServlet.handleSync(JavalinServlet.kt:53)
+	at io.javalin.http.servlet.JavalinServlet.service(JavalinServlet.kt:41)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at io.javalin.jetty.JavalinJettyServlet.service(JavalinJettyServlet.kt:58)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:587)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:529)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1570)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at io.javalin.jetty.JettyServer$start$wsAndHttpHandler$1.doHandle(JettyServer.kt:61)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1543)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1303)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.StatisticsHandler.handle(StatisticsHandler.java:173)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel.lambda$handle$0(HttpChannel.java:505)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:762)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:497)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:572)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at java.base/java.lang.VirtualThread.run(VirtualThread.java:329)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:678)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 44 more
+2025-11-12 20:19:01 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)[*]ORDER BYname asc"; SQL statement:
+SELECT * FROM recipe WHERE LOWER(name) LIKE LOWER(?)ORDER BYname asc [42000-214]

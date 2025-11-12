@@ -1,12 +1,14 @@
 package com.revature.controller;
 
-import io.javalin.http.Handler;
-import io.javalin.Javalin;
-import io.javalin.http.Context;
-
+import com.revature.model.Chef;
+import com.revature.model.Recipe;
 import com.revature.service.AuthenticationService;
 import com.revature.service.RecipeService;
-
+import com.revature.util.Page;
+import io.javalin.Javalin;
+import io.javalin.http.Context;
+import io.javalin.http.Handler;
+import java.util.Optional;
 /**
  * The RecipeController class provides RESTful endpoints for managing recipes.
  * It interacts with the RecipeService to fetch, create, update, and delete recipes.
@@ -41,20 +43,18 @@ public class RecipeController {
      */
     public Handler fetchAllRecipes = ctx -> {
         String term = ctx.queryParam("term");
-        int page = getParamAsClassOrElse(ctx, "page", Integer.class, 1);
-        int pageSize = getParamAsClassOrElse(ctx, "pageSize", Integer.class, 10);
-        String sortBy = getParamAsClassOrElse(ctx, "sortBy", String.class, "id");
-        String sortDirection = getParamAsClassOrElse(ctx, "sortDirection", String.class, "asc");
+      int page = (Integer)this.getParamAsClassOrElse(ctx, "page", Integer.class, 1);
+      int pageSize = (Integer)this.getParamAsClassOrElse(ctx, "pageSize", Integer.class, 10);
+      String sortBy = (String)this.getParamAsClassOrElse(ctx, "sortBy", String.class, "id");
+      String sortDirection = (String)this.getParamAsClassOrElse(ctx, "sortDirection", String.class, "asc");
+      Page<Recipe> recipesPage = this.recipeService.searchRecipes(term, page, pageSize, sortBy, sortDirection);
+      if (recipesPage != null && !recipesPage.getItems().isEmpty()) {
+         ctx.status(200).json(recipesPage);
+      } else {
+         ctx.status(404).result("No recipes found");
+      }
 
-        var recipesPage = recipeService.searchRecipes(term, page, pageSize, sortBy, sortDirection);
-
-        if (recipesPage == null || recipesPage.getItems().isEmpty()) {
-            ctx.status(404).result("No recipes found");
-        } else {
-            ctx.status(200).json(recipesPage);
-        }
-    };
-
+   };
     /**
      * TODO: Handler for fetching a recipe by its ID.
      * 
@@ -64,16 +64,14 @@ public class RecipeController {
      */
     public Handler fetchRecipeById = ctx -> {
         int id = Integer.parseInt(ctx.pathParam("id"));
+      Optional<Recipe> recipeOptional = this.recipeService.findRecipe(id);
+      if (recipeOptional.isPresent()) {
+         ctx.status(200).json(recipeOptional.get());
+      } else {
+         ctx.status(404).json("Recipe not found");
+      }
 
-        var recipeOptional = recipeService.findRecipe(id);
-
-        if(recipeOptional.isPresent()){
-            ctx.status(200).json(recipeOptional.get());
-        } else {
-            ctx.status(404).json("Recipe not found");
-        }
-        
-    };
+   };
 
     /**
      * TODO: Handler for creating a new recipe. Requires authentication via an authorization token taken from the request header.
@@ -82,17 +80,16 @@ public class RecipeController {
      * If unauthorized, responds with a 401 Unauthorized status.
      */
     public Handler createRecipe = ctx -> {
-        String token = ctx.header("Authorization");
-        var chef = authService.getChefFromSessionToken(token);
-
-        if (chef==null){
-            ctx.status(401).json("Unauthorized");
-            return ;
-        }
-        var recipe =ctx.bodyAsClass(com.revature.model.Recipe.class);
-        recipeService.saveRecipe(recipe);
-        ctx.status(201).json(recipe);
-    };
+       String token = ctx.header("Authorization");
+      Chef chef = this.authService.getChefFromSessionToken(token);
+      if (chef == null) {
+         ctx.status(401).json("Unauthorized");
+      } else {
+         Recipe recipe = (Recipe)ctx.bodyAsClass(Recipe.class);
+         this.recipeService.saveRecipe(recipe);
+         ctx.status(201).json(recipe);
+      }
+   };
 
     /**
      * TODO: Handler for deleting a recipe by its id.
@@ -103,15 +100,14 @@ public class RecipeController {
      */
     public Handler deleteRecipe = ctx -> {
         int id = Integer.parseInt(ctx.pathParam("id"));
-        var recipeOptional = recipeService.findRecipe(id);
-
-        if (recipeOptional.isEmpty()){
-            ctx.status(404).json("Recipe not found");
-            return;
-        }
-        recipeService.deleteRecipe(id);
-        ctx.status(200).json("Recipe deleted successfully.");
-    };
+      Optional<Recipe> recipeOptional = this.recipeService.findRecipe(id);
+      if (recipeOptional.isEmpty()) {
+         ctx.status(404).json("Recipe not found");
+      } else {
+         this.recipeService.deleteRecipe(id);
+         ctx.status(200).json("Recipe deleted successfully.");
+      }
+   };
 
     /**
      * TODO: Handler for updating a recipe by its ID.
@@ -121,20 +117,17 @@ public class RecipeController {
      * If unsuccessfuly, responds with a 404 status code and a result of "Recipe not found."
      */
     public Handler updateRecipe = ctx -> {
-        int id= Integer.parseInt(ctx.pathParam("id"));
-        var existingRecipe= recipeService.findRecipe(id);
-        if (existingRecipe.isEmpty()){
-            ctx.status(404).json("Recipe not found");
-            return;
-        }
-        var updatedRecipe= ctx.bodyAsClass(com.revature.model.Recipe.class);
-        updatedRecipe.setId(id);
-
-        recipeService.saveRecipe(updatedRecipe);
-
-        ctx.status(200).json(updatedRecipe);
-
-    };
+        int id = Integer.parseInt(ctx.pathParam("id"));
+      Optional<Recipe> existingRecipe = this.recipeService.findRecipe(id);
+      if (existingRecipe.isEmpty()) {
+         ctx.status(404).json("Recipe not found");
+      } else {
+         Recipe updatedRecipe = (Recipe)ctx.bodyAsClass(Recipe.class);
+         updatedRecipe.setId(id);
+         this.recipeService.saveRecipe(updatedRecipe);
+         ctx.status(200).json(updatedRecipe);
+      }
+   };
 
     /**
      * A helper method to retrieve a query parameter from the context as a specific class type, or return a default value if the query parameter is not present.
@@ -148,17 +141,16 @@ public class RecipeController {
      */
     private <T> T getParamAsClassOrElse(Context ctx, String queryParam, Class<T> clazz, T defaultValue) {
         String paramValue = ctx.queryParam(queryParam);
-        if (paramValue != null) {
-            if (clazz == Integer.class) {
-                return clazz.cast(Integer.valueOf(paramValue));
-            } else if (clazz == Boolean.class) {
-                return clazz.cast(Boolean.valueOf(paramValue));
-            } else {
-                return clazz.cast(paramValue);
-            }
-        }
-        return defaultValue;
-    }
+      if (paramValue != null) {
+         if (clazz == Integer.class) {
+            return clazz.cast(Integer.valueOf(paramValue));
+         } else {
+            return clazz == Boolean.class ? clazz.cast(Boolean.valueOf(paramValue)) : clazz.cast(paramValue);
+         }
+      } else {
+         return defaultValue;
+      }
+   }
 
     /**
      * Configure the routes for recipe operations.
@@ -166,10 +158,10 @@ public class RecipeController {
      * @param app the Javalin application
      */
     public void configureRoutes(Javalin app) {
-        app.get("/recipes", fetchAllRecipes);
-        app.get("/recipes/{id}", fetchRecipeById);
-        app.post("/recipes", createRecipe);
-        app.put("/recipes/{id}", updateRecipe);
-        app.delete("/recipes/{id}", deleteRecipe);
+        app.get("/recipes", this.fetchAllRecipes);
+        app.get("/recipes/{id}", this.fetchRecipeById);
+        app.post("/recipes", this.createRecipe);
+        app.put("/recipes/{id}", this.updateRecipe);
+        app.delete("/recipes/{id}", this.deleteRecipe);
     }
 }
